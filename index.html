@@ -1,69 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The City That Lost Its Thought</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div id="game-shell" class="game-shell">
-      <div id="game-background" class="game-background">
-        <div class="bg-overlay"></div>
-      </div>
-
-      <div id="character-layer" class="character-layer" aria-hidden="true">
-        <div class="spark-orb"></div>
-        <div class="spark-body">
-          <div class="spark-eye"></div>
-          <div class="spark-eye right"></div>
-          <div class="spark-mouth"></div>
-        </div>
-      </div>
-
-      <header id="hud" class="hud" aria-live="polite">
-        <div class="stat-pill">
-          <span class="label">Dependence</span>
-          <span id="dependence-value" class="value">0</span>
-        </div>
-        <div class="stat-pill">
-          <span class="label">Thinking</span>
-          <span id="thinking-value" class="value">0</span>
-        </div>
-        <div class="stat-pill">
-          <span class="label">Cooperation</span>
-          <span id="cooperation-value" class="value">0</span>
-        </div>
-        <div class="stat-pill">
-          <span class="label">Empathy</span>
-          <span id="empathy-value" class="value">0</span>
-        </div>
-      </header>
-
-      <main class="story-panel">
-        <div id="scene-header" class="scene-header">
-          <span id="scene-label" class="scene-label">Scene 1 • 7.png</span>
-        </div>
-
-        <div id="dialogue-box" class="dialogue-box">
-          <p id="story-text" class="story-text">
-            The future city hums under bright skies. An AI helper is everywhere.
-          </p>
-        </div>
-
-        <div id="choices" class="choices" aria-live="polite"></div>
-      </main>
-
-      <div id="ending-overlay" class="ending-overlay hidden">
-        <div class="ending-card">
-          <div id="ending-badge" class="ending-badge">Ending</div>
-          <h2 id="ending-title">Ending</h2>
-          <p id="ending-text"></p>
-          <button id="restart-button" class="restart-button">Play Again</button>
-        </div>
-      </div>
-    </div>
-
-    <script src="script.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0; url=game.html">
+  <title>The City That Lost Its Thought</title>
+  <script>location.replace('game.html');</script>
+</head>
+<body>
+  <p>Loading game... <a href="game.html">Open the game</a></p>
+</body>
 </html>
