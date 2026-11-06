@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The City That Lost Its Thought</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', 'Inter', sans-serif;
+            background-color: #1a1a2e;
+            color: white;
+            overflow: hidden; /* Prevent scrolling in the game window */
+            touch-action: manipulation;
+        }
+
+        /* Anime Visual Novel Backgrounds */
+        .bg-city-day { background: linear-gradient(to bottom, #87CEEB, #e0f6ff); }
+        .bg-classroom { background: linear-gradient(to bottom, #fdfbfb, #ebedee); }
+        .bg-lab { background: linear-gradient(to bottom, #e0c3fc, #8ec5fc); }
+        .bg-park { background: linear-gradient(to bottom, #d4fc79, #96e6a1); }
+        .bg-blackout { background: #0f172a; }
+        .bg-ruins { background: linear-gradient(to bottom, #434343, #000000); }
+        .bg-future { background: linear-gradient(to right, #fa709a 0%, #fee140 100%); }
+
+        /* Dialog Box Styling */
+        .dialog-box {
+            background: rgba(15, 23, 42, 0.85);
+            border: 4px solid #38bdf8;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 0 15px rgba(56, 189, 248, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Character Sprite Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .sprite-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Button Hover Effects */
+        .choice-btn {
+            transition: all 0.2s;
+            background: rgba(30, 41, 59, 0.9);
+            border: 2px solid #94a3b8;
+        }
+        .choice-btn:hover {
+            transform: scale(1.02) translateX(10px);
+            background: #38bdf8;
+            border-color: #bae6fd;
+            color: #0f172a;
+            box-shadow: 0 0 15px rgba(56,189,248,0.5);
+        }
+
+        /* Typing cursor */
+        .cursor::after {
+            content: '▼';
+            animation: blink 1s step-start infinite;
+            margin-left: 5px;
+            color: #38bdf8;
+            font-size: 0.8em;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Glitch effect for blackout */
+        .glitch-text {
+            color: red;
+            text-shadow: 2px 2px 0px #0ff, -2px -2px 0px #f0f;
+            animation: glitch 0.2s linear infinite;
+        }
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        /* Fade transition */
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="h-screen w-screen flex justify-center items-center bg-black">
+
+    <!-- Game Container -->
+    <div id="game-container" class="relative w-full max-w-4xl h-full max-h-[800px] sm:h-[90vh] sm:rounded-2xl overflow-hidden shadow-2xl transition-all duration-1000 flex flex-col bg-gray-900">
+        
+        <!-- Stats Bar (Top) -->
+        <div id="stats-bar" class="absolute top-0 left-0 w-full p-3 sm:p-4 flex flex-wrap justify-between gap-2 text-xs sm:text-sm font-bold z-20 hidden backdrop-blur-md bg-black/40 border-b border-white/20">
+            <div class="flex gap-2 sm:gap-4">
+                <div class="bg-blue-900/80 border-2 border-blue-500 text-blue-100 px-3 py-1 sm:py-1.5 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)] flex items-center gap-2">
+                    Dependence: <span id="stat-dep" class="text-blue-300 text-sm sm:text-base">0</span>
+                </div>
+                <div class="bg-green-900/80 border-2 border-green-500 text-green-100 px-3 py-1 sm:py-1.5 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.5)] flex items-center gap-2">
+                    Thinking: <span id="stat-think" class="text-green-300 text-sm sm:text-base">0</span>
+                </div>
+            </div>
+            <div class="flex gap-2 sm:gap-4">
+                <div class="bg-yellow-900/80 border-2 border-yellow-500 text-yellow-100 px-3 py-1 sm:py-1.5 rounded-full shadow-[0_0_10px_rgba(234,179,8,0.5)] flex items-center gap-2">
+                    Cooperation: <span id="stat-coop" class="text-yellow-300 text-sm sm:text-base">0</span>
+                </div>
+                <div class="bg-pink-900/80 border-2 border-pink-500 text-pink-100 px-3 py-1 sm:py-1.5 rounded-full shadow-[0_0_10px_rgba(236,72,153,0.5)] flex items-center gap-2">
+                    Empathy: <span id="stat-emp" class="text-pink-300 text-sm sm:text-base">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Menu / Start Screen -->
+        <div id="start-screen" class="absolute inset-0 flex flex-col justify-center items-center z-50 bg-gray-900 fade-in">
+            <div class="text-center p-8 backdrop-blur-md bg-black/50 rounded-3xl border border-white/20 shadow-2xl">
+                <h1 class="text-4xl sm:text-6xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500 drop-shadow-lg">
+                    The City That Lost Its Thought
+                </h1>
+                <p class="text-xl text-gray-200 mb-8 italic drop-shadow-md">An Interactive Story about AI Literacy</p>
+                <button onclick="startGame()" class="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold text-xl shadow-[0_0_20px_rgba(37,99,235,0.7)] transition-all hover:scale-105 border-2 border-blue-400">
+                    Start Game
+                </button>
+            </div>
+        </div>
+
+        <!-- Scene Area (Characters and Environment) -->
+        <div id="scene-area" class="flex-1 relative w-full flex justify-center items-end pb-48 sm:pb-64 z-10 hidden">
+            <!-- Character Sprite -->
+            <div id="character-sprite" class="sprite-float transition-opacity duration-300">
+                <!-- SVG for Spark the AI -->
+                <svg id="spark-svg" width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="60" fill="white" stroke="#38bdf8" stroke-width="8"/>
+                    <circle cx="80" cy="90" r="10" fill="#0f172a"/>
+                    <circle cx="120" cy="90" r="10" fill="#0f172a"/>
+                    <path d="M 85 120 Q 100 130 115 120" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+                    <circle cx="100" cy="20" r="15" fill="#facc15"/>
+                    <path d="M 100 35 L 100 40" stroke="#facc15" stroke-width="4"/>
+                    <!-- Halo/Tech rings -->
+                    <ellipse cx="100" cy="100" rx="90" ry="30" stroke="#bae6fd" stroke-width="2" stroke-dasharray="10 10" transform="rotate(20 100 100)"/>
+                    <ellipse cx="100" cy="100" rx="90" ry="30" stroke="#bae6fd" stroke-width="2" stroke-dasharray="10 10" transform="rotate(-20 100 100)"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Visual Novel UI (Bottom) -->
+        <div id="ui-layer" class="absolute bottom-0 w-full p-4 sm:p-6 z-30 hidden flex-col justify-end h-full pointer-events-none">
+            
+            <!-- Choices Container -->
+            <div id="choices-container" class="flex flex-col gap-3 mb-4 pointer-events-auto items-center w-full max-w-2xl mx-auto">
+                <!-- Choices injected by JS -->
+            </div>
+
+            <!-- Dialog Box -->
+            <div id="dialog-wrapper" class="dialog-box w-full max-w-4xl mx-auto p-4 sm:p-6 relative pointer-events-auto cursor-pointer" onclick="advanceDialog()">
+                <!-- Speaker Name -->
+                <div id="speaker-name" class="absolute -top-5 sm:-top-6 left-4 sm:left-8 bg-blue-600 text-white px-4 py-1 sm:py-2 rounded-lg font-bold text-sm sm:text-lg shadow-md border-2 border-blue-400">
+                    Narrator
+                </div>
+                <!-- Dialog Text -->
+                <div id="dialog-text" class="text-base sm:text-xl leading-relaxed min-h-[80px] sm:min-h-[96px] drop-shadow-md">
+                    ...
+                </div>
+            </div>
+        </div>
+
+        <!-- Ending Screen -->
+        <div id="end-screen" class="absolute inset-0 flex flex-col justify-center items-center z-50 bg-black hidden p-8 text-center fade-in">
+            <h2 id="end-title" class="text-4xl sm:text-5xl font-bold mb-6 text-white">Ending Title</h2>
+            <p id="end-desc" class="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed">Ending description goes here.</p>
+            <div class="bg-gray-800 p-6 rounded-xl border-l-4 border-blue-500 mb-8">
+                <p id="end-message" class="text-xl sm:text-2xl font-bold text-blue-300 italic">"Final Message"</p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-8 text-sm sm:text-base">
+                <div class="bg-gray-900 p-3 rounded">Dependence: <span id="final-dep" class="font-bold text-white">0</span></div>
+                <div class="bg-gray-900 p-3 rounded">Thinking: <span id="final-think" class="font-bold text-white">0</span></div>
+                <div class="bg-gray-900 p-3 rounded">Cooperation: <span id="final-coop" class="font-bold text-white">0</span></div>
+                <div class="bg-gray-900 p-3 rounded">Empathy: <span id="final-emp" class="font-bold text-white">0</span></div>
+            </div>
+
+            <button onclick="location.reload()" class="px-8 py-3 bg-white text-black hover:bg-gray-200 rounded-full font-bold text-lg transition-transform hover:scale-105">
+                Play Again
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Game State
+        let stats = {
+            dependence: 0,
+            thinking: 0,
+            cooperation: 0,
+            empathy: 0
+        };
+
+        let currentSceneIndex = 0;
+        let currentDialogIndex = 0;
+        let isTyping = false;
+        let typeTimeout;
+
+        // Story Data Structure
+        const story = [
+            // Scene 0: Intro (Uses the new city_day.jpg background)
+            {
+                bg: "bg-city-day",
+                showSpark: false,
+                dialogs: [
+                    { speaker: "Narrator", text: "The year is 2050. Welcome to 'Smart City'." },
+                    { speaker: "Narrator", text: "Here, every student has a powerful AI assistant." },
+                    { speaker: "Narrator", text: "Homework, drawings, essays, game guides... the AI gives the answer immediately." },
+                    { speaker: "Narrator", text: "Slowly, the citizens are stopping to think for themselves." },
+                    { speaker: "Narrator", text: "Today, you received the newest AI model." }
+                ],
+                choices: [
+                    { text: "Turn on the AI.", nextScene: 1 }
+                ]
+            },
+            // Scene 1: Chapter 1
+            {
+                bg: "bg-classroom",
+                showSpark: true,
+                dialogs: [
+                    { speaker: "Spark", text: "Hello! I am Spark, your new AI assistant. I can solve any problem!" },
+                    { speaker: "Teacher", text: "Class, your homework today is: 'Design a plan to save water in our city.'" },
+                    { speaker: "Spark", text: "Ding! I have generated a perfect, 10-page water-saving plan for you. It guarantees an A+." }
+                ],
+                choices: [
+                    { 
+                        text: "Copy Spark's answer directly. It's easy!", 
+                        effects: { dependence: 2 },
+                        nextScene: 2
+                    },
+                    { 
+                        text: "Read Spark's answer, change it, and add my own ideas.", 
+                        effects: { thinking: 2 },
+                        nextScene: 2
+                    },
+                    { 
+                        text: "Think of my own ideas first, then ask Spark to organize them.", 
+                        effects: { thinking: 3 },
+                        nextScene: 2
+                    }
+                ]
+            },
+            // Scene 2: Chapter 2
+            {
+                bg: "bg-lab",
+                showSpark: true,
+                dialogs: [
+                    { speaker: "Narrator", text: "A few weeks later, you are in the School Science Competition." },
+                    { speaker: "Teammate", text: "Wait... the experiment method Spark gave us looks wrong. It might explode!" },
+                    { speaker: "Spark", text: "Trust me. My database shows a 99% success rate. Do not worry." }
+                ],
+                choices: [
+                    { 
+                        text: "Follow Spark. Ignore the teammate.", 
+                        effects: { dependence: 2 },
+                        nextScene: 3
+                    },
+                    { 
+                        text: "Check the information online and verify it myself.", 
+                        effects: { thinking: 2 },
+                        nextScene: 3
+                    },
+                    { 
+                        text: "Discuss with my teammates and compare different methods.", 
+                        effects: { thinking: 3, cooperation: 1 },
+                        nextScene: 3
+                    }
+                ]
+            },
+            // Scene 3: Chapter 3
+            {
+                bg: "bg-park",
+                showSpark: true,
+                dialogs: [
+                    { speaker: "Narrator", text: "After school, your best friend Hin looks very angry with you." },
+                    { speaker: "Hin", text: "I can't believe you didn't wait for me!" },
+                    { speaker: "Spark", text: "Scanning human emotions... Analyzing... Best plan: Ignore him until his anger level decreases." }
+                ],
+                choices: [
+                    { 
+                        text: "Follow Spark's advice. Ignore Hin.", 
+                        effects: { dependence: 2 },
+                        nextScene: 4
+                    },
+                    { 
+                        text: "Think about why Hin is angry before deciding what to do.", 
+                        effects: { thinking: 2 },
+                        nextScene: 4
+                    },
+                    { 
+                        text: "Don't use AI. Go and talk to Hin face-to-face.", 
+                        effects: { thinking: 3, empathy: 2 },
+                        nextScene: 4
+                    }
+                ]
+            },
+            // Scene 4: Chapter 4 (Blackout)
+            {
+                bg: "bg-blackout",
+                showSpark: true,
+                dialogs: [
+                    { speaker: "Narrator", text: "One night, the lights flicker." },
+                    { speaker: "Narrator", text: "Then, the whole city loses power. The internet disappears." },
+                    { speaker: "Spark", text: "<span class='glitch-text font-mono'>CONNECTION LOST... CONNECTION LOST...</span>" },
+                    { speaker: "Spark", text: "<span class='glitch-text font-mono'>SYSTEM SHUTDOWN.</span>" }
+                ],
+                choices: [
+                    { text: "What will happen to the city?", nextScene: 5 }
+                ]
+            },
+            // Scene 5: Chapter 5 (The Disconnection)
+            {
+                bg: "bg-ruins",
+                showSpark: false,
+                dialogs: [
+                    { speaker: "Narrator", text: "Three days later. The AI is still broken." },
+                    { speaker: "Narrator", text: "Everyone has big problems. They don't know how to do math, plan food, fix machines, or make decisions." },
+                    { speaker: "Narrator", text: "It is time to see how you survived..." }
+                ],
+                choices: [
+                    { text: "View my Ending", nextScene: "ENDING" }
+                ]
+            }
+        ];
+
+        // DOM Elements
+        const elGameContainer = document.getElementById('game-container');
+        const elStartScreen = document.getElementById('start-screen');
+        const elSceneArea = document.getElementById('scene-area');
+        const elUiLayer = document.getElementById('ui-layer');
+        const elDialogText = document.getElementById('dialog-text');
+        const elSpeakerName = document.getElementById('speaker-name');
+        const elChoicesContainer = document.getElementById('choices-container');
+        const elCharacterSprite = document.getElementById('character-sprite');
+        const elStatsBar = document.getElementById('stats-bar');
+
+        function updateStatsUI() {
+            document.getElementById('stat-dep').innerText = stats.dependence;
+            document.getElementById('stat-think').innerText = stats.thinking;
+            document.getElementById('stat-coop').innerText = stats.cooperation;
+            document.getElementById('stat-emp').innerText = stats.empathy;
+        }
+
+        function startGame() {
+            elStartScreen.classList.add('hidden');
+            elSceneArea.classList.remove('hidden');
+            elUiLayer.classList.remove('hidden');
+            elUiLayer.classList.add('flex');
+            elStatsBar.classList.remove('hidden');
+            loadScene(0);
+        }
+
+        function loadScene(index) {
+            currentSceneIndex = index;
+            currentDialogIndex = 0;
+            const scene = story[index];
+
+            // Set Background
+            elGameContainer.className = `relative w-full max-w-4xl h-full max-h-[800px] sm:h-[90vh] sm:rounded-2xl overflow-hidden shadow-2xl transition-all duration-1000 flex flex-col fade-in ${scene.bg}`;
+
+            // Show/Hide Character
+            if (scene.showSpark) {
+                elCharacterSprite.classList.remove('hidden');
+            } else {
+                elCharacterSprite.classList.add('hidden');
+            }
+            
+            // Special effect for blackout Spark
+            if(scene.bg === 'bg-blackout') {
+                document.getElementById('spark-svg').style.filter = "grayscale(100%) brightness(50%) hue-rotate(180deg)";
+            } else {
+                document.getElementById('spark-svg').style.filter = "none";
+            }
+
+            elChoicesContainer.innerHTML = '';
+            showDialog();
+        }
+
+        function showDialog() {
+            const scene = story[currentSceneIndex];
+            const dialog = scene.dialogs[currentDialogIndex];
+            
+            elSpeakerName.innerText = dialog.speaker;
+            elSpeakerName.style.display = dialog.speaker ? 'block' : 'none';
+            
+            elChoicesContainer.innerHTML = ''; // Hide choices while typing
+            
+            // Typing effect
+            isTyping = true;
+            elDialogText.innerHTML = '';
+            elDialogText.classList.remove('cursor');
+            
+            let i = 0;
+            let currentText = dialog.text;
+            
+            // Handle HTML tags inside text (like the glitch span)
+            if(currentText.includes('<span')) {
+                elDialogText.innerHTML = currentText;
+                isTyping = false;
+                checkShowChoices();
+                return;
+            }
+
+            function typeChar() {
+                if (i < currentText.length) {
+                    elDialogText.innerHTML += currentText.charAt(i);
+                    i++;
+                    typeTimeout = setTimeout(typeChar, 30); // Typing speed
+                } else {
+                    isTyping = false;
+                    elDialogText.classList.add('cursor');
+                    checkShowChoices();
+                }
+            }
+            clearTimeout(typeTimeout);
+            typeChar();
+        }
+
+        function advanceDialog() {
+            if (isTyping) {
+                // Skip typing
+                clearTimeout(typeTimeout);
+                const scene = story[currentSceneIndex];
+                const dialog = scene.dialogs[currentDialogIndex];
+                elDialogText.innerHTML = dialog.text;
+                isTyping = false;
+                elDialogText.classList.add('cursor');
+                checkShowChoices();
+                return;
+            }
+
+            const scene = story[currentSceneIndex];
+            if (currentDialogIndex < scene.dialogs.length - 1) {
+                currentDialogIndex++;
+                showDialog();
+            }
+        }
+
+        function checkShowChoices() {
+            const scene = story[currentSceneIndex];
+            // Only show choices if it's the last dialog in the scene
+            if (currentDialogIndex === scene.dialogs.length - 1 && !isTyping) {
+                renderChoices(scene.choices);
+                elDialogText.classList.remove('cursor'); // Remove cursor when choices appear
+            }
+        }
+
+        function renderChoices(choices) {
+            elChoicesContainer.innerHTML = '';
+            choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = "choice-btn w-full text-left p-3 sm:p-4 rounded-xl text-sm sm:text-base font-semibold shadow-lg text-white";
+                btn.innerText = choice.text;
+                btn.onclick = (e) => {
+                    e.stopPropagation(); // Prevent advanceDialog from firing
+                    makeChoice(choice);
+                };
+                elChoicesContainer.appendChild(btn);
+            });
+        }
+
+        function makeChoice(choice) {
+            // Apply stats
+            if (choice.effects) {
+                if (choice.effects.dependence) stats.dependence += choice.effects.dependence;
+                if (choice.effects.thinking) stats.thinking += choice.effects.thinking;
+                if (choice.effects.cooperation) stats.cooperation += choice.effects.cooperation;
+                if (choice.effects.empathy) stats.empathy += choice.effects.empathy;
+                updateStatsUI();
+            }
+
+            if (choice.nextScene === "ENDING") {
+                showEnding();
+            } else {
+                loadScene(choice.nextScene);
+            }
+        }
+
+        function showEnding() {
+            elSceneArea.classList.add('hidden');
+            elUiLayer.classList.add('hidden');
+            elStatsBar.classList.add('hidden');
+            
+            const endScreen = document.getElementById('end-screen');
+            endScreen.classList.remove('hidden');
+            endScreen.classList.add('flex');
+
+            document.getElementById('final-dep').innerText = stats.dependence;
+            document.getElementById('final-think').innerText = stats.thinking;
+            document.getElementById('final-coop').innerText = stats.cooperation;
+            document.getElementById('final-emp').innerText = stats.empathy;
+
+            const title = document.getElementById('end-title');
+            const desc = document.getElementById('end-desc');
+            const msg = document.getElementById('end-message');
+
+            // Calculate Ending Logic based on provided tree
+            if (stats.thinking >= 10 && stats.cooperation >= 3 && stats.empathy >= 2) {
+                // True Ending 4: The Creator
+                endScreen.className = "absolute inset-0 flex flex-col justify-center items-center z-50 bg-future hidden p-8 text-center fade-in";
+                title.innerText = "🌟 True Ending: The Creator";
+                title.className = "text-4xl sm:text-5xl font-bold mb-6 text-yellow-300 drop-shadow-[0_0_10px_rgba(253,224,71,0.8)]";
+                desc.innerText = "The AI finally comes back. The Mayor invites you to rebuild the city! You tell the Mayor: 'AI should not think FOR people. It should help people think.' A new AI is born. It does not give direct answers anymore. Instead, it asks questions, guides logic, and encourages creativity. Years later, you become the lead designer of the new AI.";
+                msg.innerText = "The best user doesn't depend on AI; they think together with AI.";
+            } 
+            else if (stats.thinking >= 8) {
+                // Ending 3: The Wise User
+                title.innerText = "✅ Ending 3: The Wise User";
+                title.className = "text-4xl sm:text-5xl font-bold mb-6 text-green-400";
+                desc.innerText = "Many people are lost without the internet, but you are different. You start to analyze problems, find books for information, organize your classmates, and work together. Because you always questioned the AI and added your own ideas, you kept your ability to think! You lead everyone through the crisis.";
+                msg.innerText = "AI is a magnifying glass, not a brain. Your own thinking is what truly matters.";
+            }
+            else if (stats.dependence >= 8 && stats.thinking <= 3) {
+                // Ending 1: The Unthinking Person
+                title.innerText = "❌ Ending 1: The Unthinking Person";
+                title.className = "text-4xl sm:text-5xl font-bold mb-6 text-red-500";
+                desc.innerText = "You find it very hard to make decisions. You wait for the AI to come back. You can't even answer simple questions like 'How do we share the food?' or 'Where is the clean water?' You just sit and wait. Many people in the city do the same.";
+                msg.innerText = "When we give our thinking to tools, we might lose our ability to think.";
+            }
+            else {
+                // Ending 2: The Half-Dependent (Fallback / Middle ground)
+                title.innerText = "⚠️ Ending 2: The Half-Dependent";
+                title.className = "text-4xl sm:text-5xl font-bold mb-6 text-yellow-500";
+                desc.innerText = "The AI is gone, but you still remember some things. You can survive, but it is very hard. When you face complex problems, you still wait for an easy answer and struggle to figure it out yourself.";
+                msg.innerText = "AI can help me, but it cannot grow up for me.";
+            }
+        }
+    </script>
+</body>
+</html>
