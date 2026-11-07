@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1120">
+  <title>The City That Lost Its Thought | Fixed</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #070b14; }
+    iframe { display: block; width: 100%; height: 100%; border: 0; }
+  </style>
+</head>
+<body>
+  <iframe id="game-frame" src="./game_v4.html" title="The City That Lost Its Thought interactive story"></iframe>
+  <script>
+    const frame = document.getElementById('game-frame');
+
+    frame.addEventListener('load', () => {
+      const doc = frame.contentDocument;
+      if (!doc) return;
+
+      // The original page uses `hidden` on HUD/story elements but did not define it globally.
+      const fixes = doc.createElement('style');
+      fixes.textContent = `
+        .hidden { display: none !important; }
+        .bg-future { background-image: url("8%20-%20Ending%203.png") !important; }
+      `;
+      doc.head.append(fixes);
+
+      // Keep the narrative's privacy claim consistent with the player's actual choice.
+      const ending = doc.getElementById('ending-screen');
+      if (ending) {
+        const observer = new MutationObserver(() => {
+          if (ending.classList.contains('hidden')) return;
+          const privacy = doc.getElementById('final-privacy')?.textContent.trim();
+          const desc = doc.getElementById('ending-desc');
+          if (!desc || !desc.textContent.includes('Your personal data was also leaked')) return;
+
+          if (privacy === 'Protected') {
+            desc.textContent = desc.textContent.replace(
+              'Your personal data was also leaked during the server failure.',
+              'Your data remained protected because you limited Spark\'s access.'
+            );
+          } else if (privacy === 'Partial Risk') {
+            desc.textContent = desc.textContent.replace(
+              'Your personal data was also leaked during the server failure.',
+              'Some learning analytics may have been exposed during the server failure.'
+            );
+          }
+        });
+        observer.observe(ending, { attributes: true, attributeFilter: ['class'], subtree: true, childList: true, characterData: true });
+      }
+
+      // Make Space/Enter work even if focus is not currently on the dialogue box.
+      doc.addEventListener('keydown', event => {
+        if (event.key !== ' ' && event.key !== 'Enter') return;
+        if (event.target.closest('button, a, input, textarea, select')) return;
+        if (doc.getElementById('story-ui')?.classList.contains('hidden')) return;
+        if (event.target.id === 'dialog') return; // The original dialogue handler handles this case.
+        event.preventDefault();
+        doc.getElementById('dialog')?.click();
+      });
+
+      // Place keyboard focus on the active dialogue after starting or restarting.
+      for (const id of ['start-button', 'restart-button']) {
+        doc.getElementById(id)?.addEventListener('click', () => {
+          setTimeout(() => doc.getElementById('dialog')?.focus(), 0);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
