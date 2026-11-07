@@ -57,7 +57,7 @@
         if (event.key !== ' ' && event.key !== 'Enter') return;
         if (event.target.closest('button, a, input, textarea, select')) return;
         if (doc.getElementById('story-ui')?.classList.contains('hidden')) return;
-        if (event.target.id === 'dialog') return; // The original dialogue handler handles this case.
+        if (event.target.id === 'dialog') return;
         event.preventDefault();
         doc.getElementById('dialog')?.click();
       });
@@ -67,6 +67,21 @@
         doc.getElementById(id)?.addEventListener('click', () => {
           setTimeout(() => doc.getElementById('dialog')?.focus(), 0);
         });
+      }
+
+      // Use the existing ending-3 art file instead of the missing `8.png`.
+      const style = doc.createElement('style');
+      style.textContent = '.bg-future { background-image: url("8%20-%20Ending%203.png") !important; }';
+      doc.head.append(style);
+
+      // Replace the contradictory blanket claim in the Chapter 5 narration with wording
+      // that remains accurate regardless of the player's ending.
+      const script = Array.from(doc.scripts).find(item => item.textContent.includes('Around you, citizens who outsourced every decision'));
+      if (script) {
+        script.textContent = script.textContent.replace(
+          'Around you, citizens who outsourced every decision to AI are paralyzed so you are unable to ration water, verify safe battery backups, or resolve neighborhood conflicts.',
+          'Everyone has big problems. They don\'t know how to do math, plan food, fix machines, or make decisions.'
+        );
       }
     });
   </script>
