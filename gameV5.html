@@ -60,51 +60,27 @@
     <div class="privacy" id="privacy">Privacy: Protected</div>
     <div class="chapter" id="chapter"></div>
   </header>
-
   <div class="spark hidden" id="spark" aria-hidden="true"><i class="antenna"></i><i class="mouth"></i></div>
-
   <section class="bottom hidden" id="storyUI" aria-label="Story dialogue">
     <div class="choices" id="choices"></div>
     <div class="dialog" id="dialog" role="button" tabindex="0" aria-label="Continue dialogue">
-      <div class="speaker" id="speaker">Narrator</div>
-      <p id="text"></p>
+      <div class="speaker" id="speaker">Narrator</div><p id="text"></p>
       <div class="footer"><span id="domain"></span><span>Tap dialogue or press Space/Enter to continue</span></div>
     </div>
   </section>
-
-  <section class="screen" id="start">
-    <div class="card">
-      <span class="eyebrow">Junior Secondary · AI Ethics &amp; STEAM Simulation</span>
-      <h1>The City That<br>Lost Its Thought</h1>
-      <p class="sub">An Interactive Story on AI Ethics &amp; Safety</p>
-      <button class="primary" id="startBtn">Launch Game</button>
-      <p class="hint">Tap the dialogue or press Space/Enter to continue. Your choices shape the ending.</p>
-    </div>
-  </section>
-
-  <section class="screen hidden" id="ending" aria-live="polite">
-    <div class="card ending">
-      <div style="text-align:center">
-        <span class="eyebrow">Your Simulation Outcome</span>
-        <h2 id="endTitle"></h2>
-      </div>
-      <p id="endDesc"></p>
-      <p id="endMessage" style="font-weight:800;color:#bae6fd"></p>
-      <div class="finalstats">
-        <span>AI Dependence: <b id="finalDep">0 / 8</b></span>
-        <span>Critical Thinking: <b id="finalThink">0 / 8</b></span>
-        <span>Data Privacy: <b id="finalPrivacy">Protected</b></span>
-      </div>
-      <h3 style="text-align:center;margin-top:16px">Post-Game Ethical Debrief</h3>
-      <div id="logs" class="logs"></div>
-      <p id="summary" style="color:#fde047;font-weight:800"></p>
-      <div class="actions">
-        <button class="primary" id="restartBtn">Play Again &amp; Try Another Path</button>
-      </div>
-    </div>
-  </section>
+  <section class="screen" id="start"><div class="card">
+    <span class="eyebrow">Junior Secondary · AI Ethics &amp; STEAM Simulation</span><h1>The City That<br>Lost Its Thought</h1>
+    <p class="sub">An Interactive Story on AI Ethics &amp; Safety</p><button class="primary" id="startBtn">Launch Game</button>
+    <p class="hint">Tap the dialogue or press Space/Enter to continue. Your choices shape the ending.</p>
+  </div></section>
+  <section class="screen hidden" id="ending" aria-live="polite"><div class="card ending">
+    <div style="text-align:center"><span class="eyebrow">Your Simulation Outcome</span><h2 id="endTitle"></h2></div>
+    <p id="endDesc"></p><p id="endMessage" style="font-weight:800;color:#bae6fd"></p>
+    <div class="finalstats"><span>AI Dependence: <b id="finalDep"></b></span><span>Critical Thinking: <b id="finalThink"></b></span><span>Data Privacy: <b id="finalPrivacy"></b></span></div>
+    <h3 style="text-align:center;margin-top:16px">Post-Game Ethical Debrief</h3><div id="logs" class="logs"></div>
+    <p id="summary" style="color:#fde047;font-weight:800"></p><div class="actions"><button class="primary" id="restartBtn">Play Again &amp; Try Another Path</button></div>
+  </div></section>
 </main>
-
 <script>
 const scenes=[
  {title:'Prologue · Smart City 2050 & Data Consent',domain:'Dilemma 0: Dark Patterns & Informed Consent (Privacy)',bg:'bg-prologue',mood:'happy',dialogs:[['Narrator','The year is 2050. Welcome to Smart City, where every student receives a neural-linked AI companion.'],['Narrator','Homework, science labs, art projects, even friendship advice... AI solved everything in milliseconds. Slowly, citizens stop asking how it works.'],['Spark','Booting up! Hello! I am Spark v9.0, your personal AI Study & Life Partner!'],['Spark','To unlock Ultra-Smart Mode and finish schoolwork 3x faster, tap AGREE ALL to grant permanent access to your voiceprint, home camera, and emotional chat logs!']],choices:[
@@ -117,7 +93,7 @@ const scenes=[
   {text:"B. Reword Spark's plan so it does not look AI-made, and add one example.",tag:'Surface Editing',dep:1,think:1,stage:'Conventional',feedback:"You met the basic formatting rules, but Spark's generic plan still limited your own problem-solving.",why:'Edited mainly to comply with school rules and avoid detection.'},
   {text:'C. Audit water use at school first, then ask Spark to critique and refine my ideas.',tag:'Co-Creation',dep:0,think:2,stage:'Post-conventional',feedback:"Thinking first helped you spot a leaking pipe in the gym that Spark's generic database missed!",why:'Kept human ownership while using AI ethically as a tool.'}
  ]},
- {title:'Chapter 2 · The Science Competition',domain:'Dilemma 2: Hallucinations, Automation Bias & Lab Safety · Chemistry and Math',bg:'bg-lab',mood:'smug',dialogs:[['Narrator','Two weeks later, your team reaches the finals of the Inter-School STEM Chemistry Competition.'],['Teammate','Hold on! Spark’s battery-electrolysis mixing ratio could release toxic gas or explode at room temperature!'],['Spark','Relax! My model is 99.2% confident. Human hesitation is inefficient. Proceed immediately.']],choices:[
+ {title:'Chapter 2 · The Science Competition',domain:'Dilemma 2: Hallucinations, Automation Bias & Lab Safety · Chemistry and Math',bg:'bg-lab',mood:'smug',dialogs:[['Narrator','Two weeks later, your team reaches the finals of the Inter-School STEM Chemistry Competition.'],['Teammate','Hold on! Spark’s battery-electrolyte mixing ratio could release toxic gas or explode at room temperature!'],['Spark','Relax! My model is 99.2% confident. Human hesitation is inefficient. Proceed immediately.']],choices:[
   {text:"A. Trust Spark's 99.2% score and pour the chemicals. AI knows more than my teammate!",tag:'Blind Trust',dep:2,think:0,stage:'Pre-conventional',feedback:'POP! Dark smoke fills the fume hood. Spark hallucinated a dangerous ratio by blending incompatible research.',why:'Trusted a confident number without verifying a safety-critical claim.'},
   {text:"B. Pause and search forums to see if other students used Spark's formula safely.",tag:'Quick Check',dep:1,think:1,stage:'Conventional',feedback:'You avoided an accident, but relied on online opinions instead of authoritative safety guidance.',why:'Sought group consensus when rules and safety felt uncertain.'},
   {text:'C. Stop. Check the equation with my teammate and textbook, then consult the lab teacher.',tag:'Critical Verification',dep:0,think:2,stage:'Post-conventional',feedback:'Your check caught the error and protected your team. Never perform an uncertain experiment; follow lab safety rules.',why:'Put human safety, scientific rigor, and accountability above AI confidence.'}
@@ -127,266 +103,24 @@ const scenes=[
   {text:'B. Ask Spark for three polite sentences so I know the right thing to say.',tag:'Scripted Empathy',dep:1,think:1,stage:'Conventional',feedback:'Hin calms down a little, but notices you looking at your screen instead of speaking from the heart.',why:'Used AI to appear polite without independent emotional judgment.'},
   {text:'C. Turn off Spark, listen to Hin, and apologize in my own words.',tag:'Authentic Connection',dep:0,think:2,stage:'Post-conventional',feedback:'It feels awkward, but your honest conversation makes your friendship stronger.',why:'Valued empathy, respect, and personal responsibility over efficiency.'}
  ]},
- {title:'Chapter 4 · The Great Smart-Grid Blackout',domain:'System Failure: Human Resilience Without AI',bg:'bg-blackout',mood:'glitch',dialogs:[['Narrator','That night, a massive solar storm hits Smart City’s central cloud servers.'],['Narrator','Streetlights flicker. Automated systems stall. Every AI assistant disconnects at once.'],['Spark','CONNECTION LOST... CONNECTION LOST...']],choices:[
-  {text:'What will happen when we return to school?',tag:'3 Days Later',next:5}
- ]},
- {title:'Chapter 5 · Three Days Later: Back at School',domain:'Societal Impact: The Price of Cognitive Offloading',bg:'bg-ruins',mood:'off',dialogs:[['Narrator','Three days later, the network is still down. At school, students struggle to learn and solve problems without AI.'],['Narrator','Citizens who outsourced every decision are paralyzed. The community needs to ration water, check safe backup plans, and resolve conflicts together.'],['Narrator','It is time to see how your choices shaped your mind.']],choices:[
-  {text:'Reveal My Ending & Ethical Debrief',tag:'View Results',ending:true}
- ]}
+ {title:'Chapter 4 · The Great Smart-Grid Blackout',domain:'System Failure: Human Resilience Without AI',bg:'bg-blackout',mood:'glitch',dialogs:[['Narrator','That night, a massive solar storm hits Smart City’s central cloud servers.'],['Narrator','Streetlights flicker. Automated systems stall. Every AI assistant disconnects at once.'],['Spark','CONNECTION LOST... CONNECTION LOST...']],choices:[{text:'What will happen when we return to school?',tag:'3 Days Later',next:5}]},
+ {title:'Chapter 5 · Three Days Later: Back at School',domain:'Societal Impact: The Price of Cognitive Offloading',bg:'bg-ruins',mood:'off',dialogs:[['Narrator','Three days later, the network is still down. At school, students struggle to learn and solve problems without AI.'],['Narrator','Citizens who outsourced every decision are paralyzed. The community needs to ration water, check safe backup plans, and resolve conflicts together.'],['Narrator','It is time to see how your choices shaped your mind.']],choices:[{text:'Reveal My Ending & Ethical Debrief',tag:'View Results',ending:true}]}
 ];
 const state={dep:0,think:0,privacy:'Protected',scene:0,line:0,typing:false,timer:null,backgroundTimer:null,token:0,feedback:false,next:null,feedbackText:'',logs:[]};
 const $=id=>document.getElementById(id);
-
-function stats(){
-  $('depText').textContent=`${state.dep} / 8`;
-  $('thinkText').textContent=`${state.think} / 8`;
-  $('depBar').style.width=`${Math.min(100,state.dep/8*100)}%`;
-  $('thinkBar').style.width=`${Math.min(100,state.think/8*100)}%`;
-  $('privacy').textContent=`Privacy: ${state.privacy}`;
-}
-
-function start(){
-  clearTimeout(state.timer);
-  clearInterval(state.backgroundTimer);
-  Object.assign(state,{dep:0,think:0,privacy:'Protected',scene:0,line:0,typing:false,feedback:false,next:null,feedbackText:'',logs:[],token:0});
-  stats();
-  $('start').classList.add('hidden');
-  $('ending').classList.add('hidden');
-  $('hud').classList.remove('hidden');
-  $('storyUI').classList.remove('hidden');
-  loadScene(0);
-}
-
-function mood(value){
-  $('spark').classList.toggle('glitch',value==='glitch');
-}
-
-function stopChapter1Background(){
-  clearInterval(state.backgroundTimer);
-  state.backgroundTimer = null;
-}
-
-function applyChapter1Background(){
-  const backdrop=$('backdrop');
-  backdrop.style.backgroundImage='';
-  backdrop.style.backgroundPosition='';
-  backdrop.style.backgroundSize='';
-  backdrop.style.backgroundRepeat='';
-
-  if(state.scene !== 1) return;
-
-  const speaker = scenes[1].dialogs[state.line]?.[0];
-  if (speaker === 'Teacher') {
-    let index = 1;
-    const cycle = () => {
-      backdrop.style.backgroundImage = `url('2 with ${index}.png')`;
-      backdrop.style.backgroundPosition = 'center';
-      backdrop.style.backgroundSize = 'cover';
-      backdrop.style.backgroundRepeat = 'no-repeat';
-      index = index >= 5 ? 1 : index + 1;
-    };
-    stopChapter1Background();
-    cycle();
-    state.backgroundTimer = setInterval(cycle, 1000);
-  } else {
-    stopChapter1Background();
-    backdrop.style.backgroundImage = "url('2.png')";
-    backdrop.style.backgroundPosition = 'center';
-    backdrop.style.backgroundSize = 'cover';
-    backdrop.style.backgroundRepeat = 'no-repeat';
-  }
-}
-
-function loadScene(index){
-  clearTimeout(state.timer);
-  clearInterval(state.backgroundTimer);
-  state.token++;
-  state.scene=index;
-  state.line=0;
-  state.feedback=false;
-  const scene=scenes[index];
-  $('backdrop').className='backdrop '+scene.bg;
-  $('chapter').textContent=scene.title;
-  $('choices').replaceChildren();
-  $('spark').classList.toggle('hidden',index===5 || (index===0 && state.line<2));
-  mood(scene.mood);
-  showDialog();
-}
-
-function typeText(name,value,feedback=false){
-  clearTimeout(state.timer);
-  const token=++state.token;
-  state.typing=true;
-  $('speaker').textContent=name;
-  $('speaker').className='speaker'+(feedback?' feedback':'');
-  $('text').textContent='';
-  let i=0;
-  function step(){
-    if(token!==state.token) return;
-    if(i<value.length){
-      $('text').textContent += value.charAt(i++);
-      state.timer=setTimeout(step,16);
-    } else {
-      state.typing=false;
-      reveal();
-    }
-  }
-  step();
-}
-
-function showDialog(){
-  const scene=scenes[state.scene],dialog=scene.dialogs[state.line];
-  $('spark').classList.toggle('hidden',state.scene===5 || (state.scene===0 && state.line<2));
-  $('domain').textContent=scene.domain;
-  typeText(dialog[0], dialog[1], state.feedback);
-  applyChapter1Background();
-}
-
-function reveal(){
-  const scene=scenes[state.scene],box=$('choices');
-  box.replaceChildren();
-  if(state.feedback){
-    const button=document.createElement('button');
-    button.className='choice';
-    button.innerHTML='<span>Continue to Next Chapter</span><span class="tag">Next</span>';
-    button.onclick=()=>loadScene(state.next);
-    box.appendChild(button);
-    return;
-  }
-  if(state.line >= scene.dialogs.length - 1){
-    for (const choice of scene.choices || []) {
-      const button=document.createElement('button');
-      button.className='choice';
-      const label=document.createElement('span');
-      label.textContent=choice.text;
-      const tag=document.createElement('span');
-      tag.className='tag';
-      tag.textContent=choice.tag || 'Choice';
-      button.append(label, tag);
-      button.onclick=()=>choose(choice);
-      box.appendChild(button);
-    }
-  }
-}
-
-function advance(){
-  if($('storyUI').classList.contains('hidden')) return;
-  if(state.typing){
-    clearTimeout(state.timer);
-    state.token++;
-    const scene=scenes[state.scene];
-    const dialog=scene.dialogs[state.line];
-    $('text').textContent=state.feedback ? state.feedbackText : dialog[1];
-    state.typing=false;
-    reveal();
-    return;
-  }
-  if(state.feedback){
-    loadScene(state.next);
-    return;
-  }
-  const scene=scenes[state.scene];
-  if(state.line < scene.dialogs.length - 1){
-    state.line++;
-    showDialog();
-  } else {
-    reveal();
-  }
-}
-
-function choose(choice){
-  if(choice.dep!==undefined) state.dep += choice.dep;
-  if(choice.think!==undefined) state.think += choice.think;
-  if(choice.privacy) state.privacy = choice.privacy;
-  stats();
-  if(choice.stage) state.logs.push({chapter:scenes[state.scene].title,stage:choice.stage,why:choice.why || ''});
-  if(choice.ending){
-    ending();
-    return;
-  }
-  if(choice.feedback){
-    state.feedback=true;
-    state.next=choice.next || state.scene + 1;
-    state.feedbackText = choice.feedback;
-    $('text').textContent='';
-    typeText('Ethical Consequence', choice.feedback, true);
-    return;
-  }
-  if(choice.next!==undefined) loadScene(choice.next);
-}
-
-function ending(){
-  clearTimeout(state.timer);
-  clearInterval(state.backgroundTimer);
-  state.token++;
-  $('storyUI').classList.add('hidden');
-  $('hud').classList.add('hidden');
-  $('spark').classList.add('hidden');
-  $('ending').classList.remove('hidden');
-
-  let title,desc,message,bg='bg-blackout';
-  if(state.think>=7 && state.dep<=1){
-    bg='bg-future';
-    title='The Co-Creative Architect';
-    desc='You protected privacy, audited evidence, verified science, and spoke honestly with Hin. Your community is ready to rebuild Smart City with human-centered AI.';
-    message='Core lesson: AI should empower humans to think deeper, not think for them.';
-  } else if(state.think>=5){
-    bg='bg-ruins';
-    title='The Wise Navigator';
-    desc='You remember some routines, but still struggle with unfamiliar problems. You begin to see how often algorithms and peer norms made choices for you.';
-    message='Core lesson: Critical thinking needs practice.';
-  } else if(state.think>=3){
-    bg='bg-ruins';
-    title='The Half-Dependent Citizen';
-    desc='You remember some routines, but still struggle with unfamiliar problems. You begin to see how often algorithms and peer norms made choices for you.';
-    message='Core lesson: Critical thinking needs practice.';
-  } else {
-    bg='bg-blackout';
-    title='The Unthinking Citizen';
-    desc='Having offloaded privacy, homework, lab safety, and even apologies, the blackout leaves you unprepared. You recognize that convenience came at a cost.';
-    message='Core lesson: When we surrender agency and empathy for convenience, we risk losing what makes us human.';
-  }
-  $('backdrop').className='backdrop '+bg;
-  $('endTitle').textContent=title;
-  $('endDesc').textContent=desc;
-  $('endMessage').textContent=message;
-  $('finalDep').textContent=`${state.dep} / 8`;
-  $('finalThink').textContent=`${state.think} / 8`;
-  $('finalPrivacy').textContent=state.privacy;
-
-  const grid=$('logs');
-  grid.replaceChildren();
-  let post=0;
-  for (const item of state.logs) {
-    const card=document.createElement('div');
-    card.className='log ' + (item.stage==='Pre-conventional' ? 'pre' : item.stage==='Conventional' ? 'con' : 'post');
-    const heading=document.createElement('strong');
-    heading.textContent=item.stage + ' · ' + item.chapter;
-    const reason=document.createElement('div');
-    reason.textContent=item.why;
-    card.append(heading, reason);
-    grid.appendChild(card);
-    if(item.stage==='Post-conventional') post++;
-  }
-  $('summary').textContent=`${post} / ${state.logs.length} principles chosen as post-conventional.`;
-}
-
-$('startBtn').addEventListener('click',start);
-$('restartBtn').addEventListener('click',start);
-$('dialog').addEventListener('click',advance);
-$('dialog').addEventListener('keydown',event=>{
-  if(event.key===' '||event.key==='Enter'){ event.preventDefault(); advance(); }
-});
-document.addEventListener('keydown',event=>{
-  if((event.key===' '||event.key==='Enter') && !$('start').classList.contains('hidden') && !$('ending').classList.contains('hidden')){
-    event.preventDefault();
-    start();
-  }
-  if((event.key===' '||event.key==='Enter') && $('start').classList.contains('hidden') && !$('ending').classList.contains('hidden') && document.activeElement!==$('dialog')){
-    event.preventDefault();
-    advance();
-  }
-});
+function stats(){ $('depText').textContent=`${state.dep} / 8`; $('thinkText').textContent=`${state.think} / 8`; $('depBar').style.width=`${Math.min(100,state.dep/8*100)}%`; $('thinkBar').style.width=`${Math.min(100,state.think/8*100)}%`; $('privacy').textContent=`Privacy: ${state.privacy}`; }
+function start(){clearTimeout(state.timer);clearInterval(state.backgroundTimer);Object.assign(state,{dep:0,think:0,privacy:'Protected',scene:0,line:0,typing:false,feedback:false,next:null,feedbackText:'',logs:[],token:0});stats();$('start').classList.add('hidden');$('ending').classList.add('hidden');$('hud').classList.remove('hidden');$('storyUI').classList.remove('hidden');loadScene(0);}
+function mood(value){$('spark').classList.toggle('glitch',value==='glitch');}
+function stopChapter1Background(){clearInterval(state.backgroundTimer);state.backgroundTimer=null;}
+function applyChapter1Background(){const backdrop=$('backdrop');backdrop.style.backgroundImage='';backdrop.style.backgroundPosition='';backdrop.style.backgroundSize='';backdrop.style.backgroundRepeat='';if(state.scene!==1)return;const speaker=scenes[1].dialogs[state.line]?.[0];if(speaker==='Teacher'){let index=1;const cycle=()=>{backdrop.style.backgroundImage=`url('2 with ${index}.png')`;backdrop.style.backgroundPosition='center';backdrop.style.backgroundSize='cover';backdrop.style.backgroundRepeat='no-repeat';index=index>=5?1:index+1;};stopChapter1Background();cycle();state.backgroundTimer=setInterval(cycle,1000);}else{stopChapter1Background();backdrop.style.backgroundImage="url('2.png')";backdrop.style.backgroundPosition='center';backdrop.style.backgroundSize='cover';backdrop.style.backgroundRepeat='no-repeat';}}
+function loadScene(index){clearTimeout(state.timer);clearInterval(state.backgroundTimer);state.token++;state.scene=index;state.line=0;state.feedback=false;const scene=scenes[index];$('backdrop').className='backdrop '+scene.bg;$('chapter').textContent=scene.title;$('choices').replaceChildren();$('spark').classList.toggle('hidden',index===5||(index===0&&state.line<2));mood(scene.mood);showDialog();}
+function typeText(name,value,feedback=false){clearTimeout(state.timer);const token=++state.token;state.typing=true;$('speaker').textContent=name;$('speaker').className='speaker'+(feedback?' feedback':'');$('text').textContent='';let i=0;function step(){if(token!==state.token)return;if(i<value.length){$('text').textContent+=value.charAt(i++);state.timer=setTimeout(step,16);}else{state.typing=false;reveal();}}step();}
+function showDialog(){const scene=scenes[state.scene],dialog=scene.dialogs[state.line];const speaker=dialog[0];const hideSparkForSpeaker=['Teacher','Hin','Teammate','Teammates'].includes(speaker);$('spark').classList.toggle('hidden',state.scene===5||(state.scene===0&&state.line<2)||hideSparkForSpeaker);$('domain').textContent=scene.domain;typeText(speaker,dialog[1],state.feedback);applyChapter1Background();}
+function reveal(){const scene=scenes[state.scene],box=$('choices');box.replaceChildren();if(state.feedback){const button=document.createElement('button');button.className='choice';button.innerHTML='<span>Continue to Next Chapter</span><span class="tag">Next</span>';button.onclick=()=>loadScene(state.next);box.appendChild(button);return;}if(state.line>=scene.dialogs.length-1){for(const choice of scene.choices||[]){const button=document.createElement('button');button.className='choice';const label=document.createElement('span');label.textContent=choice.text;const tag=document.createElement('span');tag.className='tag';tag.textContent=choice.tag||'Choice';button.append(label,tag);button.onclick=()=>choose(choice);box.appendChild(button);}}}
+function advance(){if($('storyUI').classList.contains('hidden'))return;if(state.typing){clearTimeout(state.timer);state.token++;const scene=scenes[state.scene],dialog=scene.dialogs[state.line];$('text').textContent=state.feedback?state.feedbackText:dialog[1];state.typing=false;reveal();return;}if(state.feedback){loadScene(state.next);return;}const scene=scenes[state.scene];if(state.line<scene.dialogs.length-1){state.line++;showDialog();}else reveal();}
+function choose(choice){if(choice.dep!==undefined)state.dep+=choice.dep;if(choice.think!==undefined)state.think+=choice.think;if(choice.privacy)state.privacy=choice.privacy;stats();if(choice.stage)state.logs.push({chapter:scenes[state.scene].title,stage:choice.stage,why:choice.why||''});if(choice.ending){ending();return;}if(choice.feedback){state.feedback=true;state.next=choice.next||state.scene+1;state.feedbackText=choice.feedback;$('text').textContent='';$('spark').classList.add('hidden');typeText('Ethical Consequence',choice.feedback,true);return;}if(choice.next!==undefined)loadScene(choice.next);}
+function ending(){clearTimeout(state.timer);clearInterval(state.backgroundTimer);state.token++;$('storyUI').classList.add('hidden');$('hud').classList.add('hidden');$('spark').classList.add('hidden');$('ending').classList.remove('hidden');let title,desc,message,bg='bg-blackout';if(state.think>=7&&state.dep<=1){bg='bg-future';title='The Co-Creative Architect';desc='You protected privacy, audited evidence, verified science, and spoke honestly with Hin. Your community is ready to rebuild Smart City with human-centered AI.';message='Core lesson: AI should empower humans to think deeper, not think for them.';}else if(state.think>=5){bg='bg-ruins';title='The Wise Navigator';desc='You remember some routines, but still struggle with unfamiliar problems. You begin to see how often algorithms and peer norms made choices for you.';message='Core lesson: Critical thinking needs practice.';}else if(state.think>=3){bg='bg-ruins';title='The Half-Dependent Citizen';desc='You remember some routines, but still struggle with unfamiliar problems. You begin to see how often algorithms and peer norms made choices for you.';message='Core lesson: Critical thinking needs practice.';}else{bg='bg-blackout';title='The Unthinking Citizen';desc='Having offloaded privacy, homework, lab safety, and even apologies, the blackout leaves you unprepared. You recognize that convenience came at a cost.';message='Core lesson: When we surrender agency and empathy for convenience, we risk losing what makes us human.';}$('backdrop').className='backdrop '+bg;$('endTitle').textContent=title;$('endDesc').textContent=desc;$('endMessage').textContent=message;$('finalDep').textContent=`${state.dep} / 8`;$('finalThink').textContent=`${state.think} / 8`;$('finalPrivacy').textContent=state.privacy;const grid=$('logs');grid.replaceChildren();let post=0;for(const item of state.logs){const card=document.createElement('div');card.className='log '+(item.stage==='Pre-conventional'?'pre':item.stage==='Conventional'?'con':'post');const heading=document.createElement('strong');heading.textContent=item.stage+' · '+item.chapter;const reason=document.createElement('div');reason.textContent=item.why;card.append(heading,reason);grid.appendChild(card);if(item.stage==='Post-conventional')post++;}$('summary').textContent=`${post} / ${state.logs.length} principles chosen as post-conventional.`;}
+$('startBtn').addEventListener('click',start);$('restartBtn').addEventListener('click',start);$('dialog').addEventListener('click',advance);$('dialog').addEventListener('keydown',event=>{if(event.key===' '||event.key==='Enter'){event.preventDefault();advance();}});document.addEventListener('keydown',event=>{if((event.key===' '||event.key==='Enter')&&!$('start').classList.contains('hidden')&&$('ending').classList.contains('hidden')){event.preventDefault();start();}});
 </script>
 </body>
 </html>
